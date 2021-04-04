@@ -1,3 +1,6 @@
+# secrets
+tinyml/secret/*
+
 # vscode
 .vscode
 
@@ -17,7 +20,6 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
 lib64/
 parts/
 sdist/
