@@ -1,11 +1,12 @@
 def do_connect():
     import network
-    from secret import wifi
+    from secret import secret
+
     wlan = network.WLAN(network.STA_IF)
     wlan.active(True)
     if not wlan.isconnected():
         print('Connecting to WiFi...')
-        wlan.connect(wifi.SSID, wifi.PASS)
+        wlan.connect(secret.SSID, secret.PASS)
         while not wlan.isconnected():
             pass
     print('Network config: ', wlan.ifconfig())
@@ -23,6 +24,6 @@ def set_frequency():
     machine.freq(240000000)
     print('Machine freq set to: {} MHz'.format(int(machine.freq()/1_000_000)))
 
-do_connect()
-set_time()
+# do_connect()
+# set_time()
 set_frequency()
