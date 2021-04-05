@@ -14,9 +14,15 @@ def do_connect():
 def set_time():
     import ntptime
     import utime
-    ntptime.host = '0.europe.pool.ntp.org'
-    ntptime.settime()
-    print("Time after synchronization：%s" %str(utime.gmtime()))
+    import sys
+    try:
+        ntptime.host = '0.europe.pool.ntp.org'
+        ntptime.settime()
+        print("Time after synchronization：%s" %str(utime.gmtime()))
+    except OSError as e:
+        print('Error: {}'.format(e))
+        sys.exit()
+        
 
 def set_frequency():
     import machine
@@ -24,6 +30,6 @@ def set_frequency():
     machine.freq(240000000)
     print('Machine freq set to: {} MHz'.format(int(machine.freq()/1_000_000)))
 
-# do_connect()
-# set_time()
+do_connect()
+set_time()
 set_frequency()

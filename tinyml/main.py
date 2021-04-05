@@ -4,6 +4,7 @@ gc.collect()
 import utime
 import machine
 import uasyncio
+import _thread
 from machine import Timer, Pin, SoftI2C
 from mpu6500 import MPU6500, SF_G, SF_DEG_S, SF_M_S2
 
@@ -18,39 +19,34 @@ i2c = SoftI2C(scl=Pin(22), sda=Pin(21))
 mpu6500 = MPU6500(i2c, accel_sf=SF_M_S2, gyro_sf=SF_DEG_S)
 
 gc.collect()
-
 global data
-data = Data()
+data = Data(samples=60)
 data.init(['acc'])
 
 def read_mpu6500(timer):
     gc.collect()
-    start = utime.ticks_us()
+    print('T {}'.format(utime.ticks_ms()))
     data.collect_acc(mpu6500.acceleration)
-    print(utime.ticks_ms())
     # data.collect_gyro(mpu6500.gyro)
-    # print('Collect: {}'.format(utime.ticks_us() - start))
+    # print('Alloc: {} | Free: {}'.format(gc.mem_alloc(), gc.mem_free()))
 
-def process_rms(timer):
-    gc.collect()
-    start = utime.ticks_us()
-    # print(data.get_rms_acc_x())
-    # print(data.get_rms_acc_y())
-    # print(data.get_rms_acc_z())
-    post_request_rms(data.get_rms_acc_x(), data.get_rms_acc_y(), data.get_rms_acc_z())
-    print('RMS Process: {}'.format((utime.ticks_us() - start)/1000))
-    # print(gc.mem_alloc())
-    # print(gc.mem_free())
-
-def process_move(timer):
-    gc.collect()
+def process_move(interval):
     import urandom
-    print('Movement detected: {}'.format(urandom.getrandbits(2)))
+    while True:
+        gc.collect()
+        utime.sleep(interval)
+        print('Movement detected: {}'.format(urandom.getrandbits(2)))
 
-timer_mpu6500 = Timer(0)
-timer_rms = Timer(1)
-timer_move = Timer(2)
+def read_sensor():
+    Timer(0).init(period=100, mode=Timer.PERIODIC, callback=read_mpu6500)
 
-timer_mpu6500.init(period=10, mode=Timer.PERIODIC, callback=read_mpu6500)
-timer_rms.init(period=2_000, mode=Timer.PERIODIC, callback=process_rms)
-timer_move.init(period=1_000, mode=Timer.PERIODIC,callback=process_move)
+def send_rms_data(interval):
+    while True:
+        gc.collect()
+        utime.sleep(interval)
+        post_request_rms(data.get_rms_acc_x(), data.get_rms_acc_y(), data.get_rms_acc_z())
+
+
+_thread.start_new_thread(read_sensor,())
+_thread.start_new_thread(send_rms_data,(3,))
+_thread.start_new_thread(process_move, (3,))

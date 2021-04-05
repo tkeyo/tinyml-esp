@@ -13,12 +13,8 @@ def post_request_move(move: int=1):
     time = unix_base + utime.time()
     payload = ujson.dumps({'time':time, 'move':move})
 
-    print(payload)
     try:
-        res = urequests.post(
-            '{}/api/write-move'.format(URL),
-            data=payload,
-            headers=headers)
+        res = urequests.post('{}/api/write-move'.format(URL), data=payload, headers=headers)
         print(res.content)
         res.close()
     except OSError:
@@ -28,13 +24,9 @@ def post_request_rms(x,y,z):
     time = unix_base + utime.time()
     payload = ujson.dumps({'time':time, 'acc_x_rms':x, 'acc_y_rms':y, 'acc_z_rms':z})
 
-    print(payload)
     try:
-        res = urequests.post(
-            '{}/api/write-rms'.format(URL),
-            data=payload,
-            headers=headers)
+        res = urequests.post('{}/api/write-rms'.format(URL), data=payload, headers=headers)
         print(res.content)
         res.close()
-    except OSError:
-        print('Server unreachable')
+    except OSError as e:
+        print('Error: {}'.format(e))

@@ -90,7 +90,7 @@ class MPU6500:
         accel_fs=ACCEL_FS_SEL_2G, gyro_fs=GYRO_FS_SEL_250DPS,
         accel_sf=SF_M_S2, gyro_sf=SF_RAD_S,
         gyro_offset=(0, 0, 0)
-    ):
+        ):
         self.i2c = i2c
         self.address = address
 
