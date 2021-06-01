@@ -2,6 +2,7 @@ import math
 # %%
 
 class Data:
+    # https://docs.python.org/3/library/array.html
     def __init__(self, freq, n_signals):
         self.n_signals = n_signals
         self.capacity = freq * self.n_signals
@@ -23,8 +24,6 @@ class Data:
  
     def collect(self, acc=None, gyro=None):
         while self._is_full():
-        # if self._is_full():
-        #     for _ in range(self.n_signals):
             self.buffer.pop(0)
         if acc:
             self.buffer.extend(acc)
@@ -34,8 +33,9 @@ class Data:
     def get(self):
         return self.buffer
 
-    def rms(self, pos):
-        return self._calc_rms(self.buffer[pos:][0::3])
+    def rms(self, signal: int):
+        """Params: signal index"""
+        return self._calc_rms(self.buffer[signal:][0::3])
 
     def size(self):
         return len(self.buffer)
