@@ -33,6 +33,13 @@ start_time = utime.ticks_ms()
 def get_time():
     return (utime.mktime(utime.gmtime()) + unix_base + 3600) * 1000
 
+def get_time_diff(preds):
+    """List of tuples"""
+    if len(preds) >= 2:
+        return utime.ticks_diff(pred_tuples[-1][0], pred_tuples[0][0])
+    else:
+        return 0
+    
 def read(timer):
     gc.collect()
     acc = mpu6500.acceleration
