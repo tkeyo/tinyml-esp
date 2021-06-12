@@ -61,30 +61,35 @@ def score(timer):
     global send_buffer
 
     gc.collect()
-    res = rf.predict(data.get())
-    if res != 0:
-        predictions.append(res)
-  
     now = utime.ticks_ms()
-    diff = utime.ticks_diff(now, start_time)
+
+    input_data = data.get()
+
+    if len(input_data) == 256:
+        res = rf.predict(data.get())
+        if res != 0:
+            pred_tuples.append((now, res))
+    
+    diff = get_time_diff(pred_tuples)
 
     gc.collect()
-    if len(predictions) > 8 and diff > 450:
-        start_time = utime.ticks_ms()
-        result = max(set(predictions), key=predictions.count)
+    if len(pred_tuples) >= 9 and diff > 450:
+        # start_time = utime.ticks_ms()
+        predictions = reduce_preds(pred_tuples)
+        result = get_final_result(predictions)
+
         print('{} -> {}'.format(predictions, result))
         send_buffer.append({
             'type': 'move',
             'pred': result,
             'time': get_time()})
-        predictions = []
-        print(send_buffer)
-
-    if len(predictions) < 6 and diff > 1500:
-        print(predictions)
-        predictions = []
-        print('Pred cleaned')
-    # print("Score: ", utime.ticks_diff(utime.ticks_ms(), score_start))
+        pred_tuples = []
+        # print(send_buffer)
+        print("Score: ", utime.ticks_diff(utime.ticks_ms(), score_start))
+    
+    if len(pred_tuples) <= 8 and diff >= 1_000:
+        pred_tuples = []
+        
 
 def rms(timer):
     gc.collect()
@@ -127,5 +132,5 @@ def run_http():
 if __name__ == '__main__':
     read_sensor()
     run_score()
-    # run_rms()
-    # run_http()
+    run_rms()
+    run_http()
