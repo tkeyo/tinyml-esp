@@ -3,7 +3,7 @@ import math
 class Data:
     def __init__(self, freq, n_signals):
         self.n_signals = n_signals
-        self.capacity = (freq * self.n_signals) + self.n_signals
+        self.cap = (freq * self.n_signals) + self.n_signals
         self.buffer = []
         
     @property
@@ -11,17 +11,21 @@ class Data:
         return len(self.buffer)
     
     @property
+    def capacity(self) -> int:
+        return self.cap
+    
+    @property
     def data(self) -> list:
         return self.buffer
 
-    def _scale(self, vals: list, xmin: int, xmax: int, resolution:) -> list:
+    def _scale(self, vals: list, xmin: int, xmax: int, resolution: int) -> list:
         return [int((x-xmin)/(xmax-xmin)*resolution) for x in vals]
 
     def _round(self, vals: list, places: int=4) -> list:
         return [round(x, places) for x in vals]
 
     def _is_full(self) -> bool:
-        return len(self.buffer) > self.capacity
+        return len(self.buffer) > (self.capacity - 3)
 
     def _calc_rms(self, vals: list) -> float:
         pow = math.pow
