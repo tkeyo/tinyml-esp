@@ -24,7 +24,7 @@ gc.collect()
 data = Data(freq=50, n_signals=5)
 data.buffer = [0] * 51 * 5
 
-predictions = []
+pred_tuples = []
 send_buffer = []
 
 unix_base = const(946681200)
