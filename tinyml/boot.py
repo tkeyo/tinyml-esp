@@ -2,7 +2,7 @@ def do_connect():
     import network
     from secret import secret
 
-    if secret.CONNECT:
+    if secret.IS_CONNECT_WIFI:
         wlan = network.WLAN(network.STA_IF)
         wlan.active(True)
         if not wlan.isconnected():
@@ -19,7 +19,7 @@ def set_time():
     import utime
     import sys
     from secret import secret
-    if secret.CONNECT:
+    if secret.IS_CONNECT_WIFI:
         try:
             ntptime.host = '0.europe.pool.ntp.org'
             ntptime.settime()
@@ -32,9 +32,9 @@ def set_time():
         
 def set_frequency():
     import machine
-    print('Machine freq: {} MHz'.format(int(machine.freq()/1_000_000)))
+    print('Machine freq: {} MHz'.format(int(machine.freq() / 1_000_000)))
     machine.freq(240000000)
-    print('Machine freq set to: {} MHz'.format(int(machine.freq()/1_000_000)))
+    print('Machine freq set to: {} MHz'.format(int(machine.freq() / 1_000_000)))
 
 do_connect()
 set_time()
