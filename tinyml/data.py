@@ -34,7 +34,7 @@ class Data:
         return self.buffer
     
 
-    def rms(self, signal: int):
+    def get_rms(self, signal: int):
         """Params: signal index"""
         return self._calc_rms(self.buffer[signal:][0::3])
 
