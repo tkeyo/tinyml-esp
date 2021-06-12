@@ -115,7 +115,7 @@ class Data:
             Gets root mean square (RMS) of defined signal.
             
             Args:
-                signal: Number of signal as collected.
+                signal: Number of signal in order as collected.
                         Depends on how signals are defined in `collect` method.
                         Given `Data.collect([acc_x, acc_y],[gyro_x])` and 
                         `get_rms(1)` - this method will return the RMS of `acc_y`.
