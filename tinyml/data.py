@@ -18,7 +18,7 @@ class Data:
         self.cap = (freq * self.n_signals) + self.n_signals
         self.buffer = []
 
-      
+
     @property
     def size(self) -> int:
         '''Returns the size of the collected data buffer.'''
@@ -33,7 +33,7 @@ class Data:
    
     @property
     def data(self) -> list:
-        '''Returns the collected data.'''
+        '''Returns collected data.'''
         return self.buffer
 
 
@@ -76,7 +76,7 @@ class Data:
             Returns:
                 True if buffer is larger than capacity - # of signals
         '''
-        return len(self.buffer) > (self.capacity - self.n_signals)
+        return len(self.buffer) > (self.cap - self.n_signals)
 
 
     def _calc_rms(self, vals: list) -> float:
