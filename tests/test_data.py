@@ -1,12 +1,15 @@
 import pytest
 from tinyml.data import Data
 
+
 @pytest.fixture
 def data():
     return Data(freq=3, n_signals=3)
 
+
 def test_capacity(data):
-    assert data.capacity == 12 
+    assert data.capacity == 12
+
 
 @pytest.mark.parametrize(
     'acc_x, acc_y, gyro_x, expected_buffer_size',
