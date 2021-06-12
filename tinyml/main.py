@@ -40,6 +40,9 @@ def get_time_diff(preds):
     else:
         return 0
     
+def get_final_result(preds):
+    return max(set(preds), key=preds.count)
+
 def read(timer):
     gc.collect()
     acc = mpu6500.acceleration
