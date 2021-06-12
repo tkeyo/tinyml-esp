@@ -2,11 +2,10 @@ import math
 # %%
 
 class Data:
-    # https://docs.python.org/3/library/array.html
     def __init__(self, freq, n_signals):
         self.n_signals = n_signals
-        self.capacity = freq * self.n_signals
-        self.buffer = list()
+        self.capacity = (freq * self.n_signals) + self.n_signals
+        self.buffer = []
     
     def _scale(self, vals, xmin, xmax, resolution):
         return [int((x-xmin)/(xmax-xmin)*resolution) for x in vals]
