@@ -56,9 +56,8 @@ def read(timer):
 
 def score(timer):
     gc.collect()
-    # score_start = utime.ticks_ms()
-    global start_time
-    global predictions
+    score_start = utime.ticks_ms()
+    global pred_tuples
     global send_buffer
 
     gc.collect()
