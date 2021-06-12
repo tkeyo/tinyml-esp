@@ -12,8 +12,10 @@
 
 def add_vectors(v1, v2):
     return [sum(i) for i in zip(v1, v2)]
+
 def mul_vector_number(v1, num):
     return [i * num for i in v1]
+
 def score(input):
     if (input[117]) <= (5.019443988800049):
         var0 = [0.0, 0.0, 0.0, 1.0]
@@ -128,6 +130,6 @@ def score(input):
             var5 = [0.0, 0.0, 1.0, 0.0]
     return add_vectors(add_vectors(add_vectors(add_vectors(add_vectors(var0, var1), var2), var3), var4), var5)
 
-def predict(input: list):
+def run(input: list):
     res = score(input)
     return res.index(max(res))
