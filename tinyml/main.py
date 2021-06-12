@@ -9,9 +9,9 @@ from mpu6500 import MPU6500, SF_DEG_S, SF_M_S2
 
 gc.collect()
 from data import Data
-from http_api import post_request_rms, post_request_move
+from util import get_time, get_time_diff, get_final_inf_res, reduce_infs, debounce
+from http import request_post
 
-# from model import random_forest_cd3e41b as rf
 from model import random_forest_a8c9ff5 as rf
 
 print('Starting ESP32 script.')
@@ -22,29 +22,12 @@ mpu6500 = MPU6500(i2c, accel_sf=SF_M_S2, gyro_sf=SF_DEG_S)
 
 gc.collect()
 data = Data(freq=50, n_signals=5)
-data.buffer = [0] * 51 * 5
+data_cap = data.capacity
 
-pred_tuples = []
+inf_tuples = []
 send_buffer = []
 
-unix_base = const(946681200)
 start_time = utime.ticks_ms()
-
-def get_time():
-    return (utime.mktime(utime.gmtime()) + unix_base + 3600) * 1000
-
-def get_time_diff(preds):
-    """List of tuples"""
-    if len(preds) >= 2:
-        return utime.ticks_diff(pred_tuples[-1][0], pred_tuples[0][0])
-    else:
-        return 0
-    
-def get_final_result(preds):
-    return max(set(preds), key=preds.count)
-
-def reduce_preds(preds_tup):
-    return [x[1] for x in preds_tup[:9]]
 
 def read(timer):
     gc.collect()
@@ -57,38 +40,36 @@ def read(timer):
 def score(timer):
     gc.collect()
     score_start = utime.ticks_ms()
-    global pred_tuples
+    global inf_tuples
     global send_buffer
 
     gc.collect()
     now = utime.ticks_ms()
 
-    input_data = data.get()
+    input_data = data.data
 
-    if len(input_data) == 256:
-        res = rf.predict(data.get())
-        if res != 0:
-            pred_tuples.append((now, res))
+    if len(input_data) == data_cap:
+        res = rf.run(data.data)
+        if res in [1,2,3] :
+            inf_tuples.append((now, res))
     
-    diff = get_time_diff(pred_tuples)
+    time_diff = get_time_diff(inf_tuples)
 
     gc.collect()
-    if len(pred_tuples) >= 9 and diff > 450:
-        # start_time = utime.ticks_ms()
-        predictions = reduce_preds(pred_tuples)
-        result = get_final_result(predictions)
-
-        print('{} -> {}'.format(predictions, result))
+    result, reduced_infs = debounce(inf_tuples, time_diff)
+    
+    if result:
+        print('{} -> {}'.format(reduced_infs, result))
         send_buffer.append({
             'type': 'move',
             'pred': result,
             'time': get_time()})
-        pred_tuples = []
-        # print(send_buffer)
-        print("Score: ", utime.ticks_diff(utime.ticks_ms(), score_start))
+        inf_tuples = []
+        print(send_buffer)
+        # print("Score: ", utime.ticks_diff(utime.ticks_ms(), score_start))
     
-    if len(pred_tuples) <= 8 and diff >= 1_000:
-        pred_tuples = []
+    if len(inf_tuples) <= 8 and time_diff >= 1_000:
+        inf_tuples = []
         
 
 def rms(timer):
@@ -132,5 +113,5 @@ def run_http():
 if __name__ == '__main__':
     read_sensor()
     run_score()
-    run_rms()
-    run_http()
+    # run_rms()
+    # run_http()
