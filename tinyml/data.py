@@ -29,13 +29,16 @@ class Data:
         if gyro:
             self.buffer.extend(gyro)
 
-    def get(self):
+    @property
+    def data(self):
         return self.buffer
+    
 
     def rms(self, signal: int):
         """Params: signal index"""
         return self._calc_rms(self.buffer[signal:][0::3])
 
+    @property
     def size(self):
         return len(self.buffer)
 
