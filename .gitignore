@@ -1,5 +1,5 @@
 # secrets
-tinyml/secret/*
+tinyml/secret/secret.py
 
 .DS_Store
 
