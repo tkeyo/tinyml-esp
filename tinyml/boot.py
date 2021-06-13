@@ -40,6 +40,7 @@ def set_frequency():
     machine.freq(240000000)
     print('[Boot] Machine freq set to: {} MHz'.format(int(machine.freq() / 1_000_000)))
 
+
 if __name__ == '__main__':
     do_connect()
     sync_time()

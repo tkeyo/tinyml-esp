@@ -97,13 +97,16 @@ def rms(timer):
 def send_data(timer):
     '''Sends queued data to API endpoint.'''
     gc.collect()
+    send_counter = 1
+    
     global send_queue
     while send_queue:
         send_start = utime.ticks_ms()
         data_to_send = send_queue.popleft()
         request_post(data_to_send['type'], data_to_send['payload'])
-        print('Data sent: {}'.format(data_to_send))
-        print("Post: {}".format(utime.ticks_diff(utime.ticks_ms(), send_start)))
+        print('Payload {}: {}'.format(send_counter, data_to_send['payload']))
+        print('Data send time: {}'.format(utime.ticks_diff(utime.ticks_ms(), send_start)))
+        send_counter += 1
 
 
 def read_sensor():
