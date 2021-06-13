@@ -6,13 +6,13 @@ def do_connect():
         wlan = network.WLAN(network.STA_IF)
         wlan.active(True)
         if not wlan.isconnected():
-            print('Connecting to WiFi...')
+            print('[Boot] Connecting to WiFi...')
             wlan.connect(secret.SSID, secret.PASS)
             while not wlan.isconnected():
                 pass
-        print('Network config: ', wlan.ifconfig())
+        print('[Boot] Connected to WiFI. Config: {}'.format (wlan.ifconfig()))
     else:
-        print('WiFi Connect OFF')
+        print('[Boot] Not connecting to WiFi. Running in Offline mode.')
 
 def set_time():
     import ntptime
@@ -23,18 +23,17 @@ def set_time():
         try:
             ntptime.host = '0.europe.pool.ntp.org'
             ntptime.settime()
-            print("Time after synchronization：%s" %str(utime.gmtime()))
+            print('[Boot] Time synced: {}'.format(str(utime.gmtime())))
         except OSError as e:
-            print('Error: {}'.format(e))
+            print('[Boot] Error while syncing time: {}'.format(e))
             sys.exit()
     else:
-        print('Time not synchronized')
+        print('[Boot] Running in Offline mode. Time is note synced.')
         
 def set_frequency():
     import machine
-    print('Machine freq: {} MHz'.format(int(machine.freq() / 1_000_000)))
     machine.freq(240000000)
-    print('Machine freq set to: {} MHz'.format(int(machine.freq() / 1_000_000)))
+    print('[Boot] Machine freq set to: {} MHz'.format(int(machine.freq() / 1_000_000)))
 
 do_connect()
 set_time()
