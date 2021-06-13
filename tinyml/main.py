@@ -25,7 +25,7 @@ mpu6500 = MPU6500(i2c, accel_sf=SF_M_S2, gyro_sf=SF_DEG_S)
 gc.collect()
 data = Data(freq=50, n_signals=5)
 data_cap = data.capacity
-print('[Main] Data store initiated. Cap: {}'.format(data_cap))
+print('[Main] Data store initiated. Capacity: {}'.format(data_cap))
 
 inf_tuples = []
 send_queue = deque((),10)
@@ -68,6 +68,7 @@ def score(timer):
         send_queue.append({
             'type': 'move',
             'payload': {
+                'device_id':1,
                 'move': result,
                 'time': get_time()
                 }})
@@ -87,6 +88,7 @@ def rms(timer):
     send_queue.append({
         'type': 'rms',
         'payload':{
+            'device_id':1,
             'acc_x_rms':rms(0),
             'acc_y_rms':rms(1),
             'acc_z_rms':rms(2),
