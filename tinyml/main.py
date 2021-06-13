@@ -34,7 +34,7 @@ start_time = utime.ticks_ms()
 
 
 def read(timer):
-    '''Reads acceleration and gyroscope values from MPU6500 sensor.'''
+    '''Collects acceleration and gyroscope values from MPU6500 sensor.'''
     gc.collect()
     acc = mpu6500.acceleration
     gyro = mpu6500.gyro
