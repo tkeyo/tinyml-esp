@@ -1,4 +1,5 @@
 def do_connect():
+    '''Creates connection to WiFi based on configuration in `secrets.py`.'''
     import network
     from secret import secret
 
@@ -15,6 +16,7 @@ def do_connect():
         print('[Boot] Not connecting to WiFi. Running in Offline mode.')
 
 def sync_time():
+    '''Synchronizes time with ntptime host.'''
     import ntptime
     import utime
     import sys
@@ -31,6 +33,7 @@ def sync_time():
         print('[Boot] Running in Offline mode. Time is note synced.')
         
 def set_frequency():
+    '''Sets CPU frequency of ESP32.'''
     import machine
     machine.freq(240000000)
     print('[Boot] Machine freq set to: {} MHz'.format(int(machine.freq() / 1_000_000)))
