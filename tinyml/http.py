@@ -1,7 +1,11 @@
 import ujson
 import urequests
 from micropython import const
-from secret.secret import URL, AUTHORIZATION, MOVE_ENDPOINT, RMS_ENDPOINT
+from secret.secret import (URL, 
+                           AUTHORIZATION, 
+                           MOVE_ENDPOINT, 
+                           RMS_ENDPOINT,
+                           IS_CONNECT_WIFI)
 
 
 headers = {
@@ -19,16 +23,19 @@ def get_api_endpoint(t):
     return endpoint_mapping.get(t, 'missing')
 
 
-def request_post(time, api_target, payload):
+def request_post(api_target, payload):
     '''Sends POST requests to REST API endpoints.'''
-    data = ujson.dumps(payload)
     endpoint = get_api_endpoint(api_target)
-    try:
-        res = urequests.post(
-                '{}/{}'.format(URL, endpoint),
-                data=data,
-                headers=headers
-                )
-        res.close()
-    except OSError as e:
-        print('Error: {}'.format(e))
+    data = ujson.dumps(payload)
+    
+    if IS_CONNECT_WIFI:
+        try:
+            res = urequests.post(
+                    '{}/{}'.format(URL, endpoint),
+                    data=data,
+                    headers=headers)
+            res.close()
+        except OSError as e:
+            print('Error: {}'.format(e))
+    else:
+        print('Not connected to WiFi. Running in Offline mode.')

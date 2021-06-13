@@ -3,7 +3,9 @@ import gc
 gc.collect()
 import utime
 import machine
-import _thread
+from ucollections import deque
+
+gc.collect()
 from machine import Timer, Pin, SoftI2C
 from mpu6500 import MPU6500, SF_DEG_S, SF_M_S2
 
@@ -25,7 +27,7 @@ data = Data(freq=50, n_signals=5)
 data_cap = data.capacity
 
 inf_tuples = []
-send_buffer = []
+send_queue = deque((),10)
 
 start_time = utime.ticks_ms()
 
@@ -41,7 +43,7 @@ def score(timer):
     gc.collect()
     score_start = utime.ticks_ms()
     global inf_tuples
-    global send_buffer
+    global send_queue
 
     gc.collect()
     now = utime.ticks_ms()
@@ -60,12 +62,13 @@ def score(timer):
     
     if result:
         print('{} -> {}'.format(reduced_infs, result))
-        send_buffer.append({
+        send_queue.append({
             'type': 'move',
-            'pred': result,
-            'time': get_time()})
+            'payload': {
+                'move': result,
+                'time': get_time()
+                }})
         inf_tuples = []
-        print(send_buffer)
         # print("Score: ", utime.ticks_diff(utime.ticks_ms(), score_start))
     
     if len(inf_tuples) <= 8 and time_diff >= 1_000:
@@ -74,44 +77,47 @@ def score(timer):
 
 def rms(timer):
     gc.collect()
-    global send_buffer
+    global send_queue
     rms = data.rms
-    send_buffer.append({
+    send_queue.append({
         'type': 'rms',
-        'rms': [rms(0),rms(1),rms(2)],
-        'time': get_time()
-        })
-    print(send_buffer)
+        'payload':{
+            'acc_x_rms':get_rms(0),
+            'acc_y_rms':get_rms(1),
+            'acc_z_rms':get_rms(2),
+            'time': get_time()
+        }})
+    print(send_queue)
 
 
-def http(timer):
+def send_data(timer):
     gc.collect()
-    global send_buffer
-    for message in send_buffer:
+    global send_queue
+    while send_queue:
         send_start = utime.ticks_ms()
-        if message['type'] == 'move':
-            print('Sending Move: ', message)
-            post_request_move(message['time'], message['pred'])
-        if message['type'] == 'rms':
-            print('Sending RMS:', message)
-            post_request_rms(message['time'], message['rms'][0], message['rms'][1], message['rms'][2])
+        data_to_send = send_queue.popleft()
+        request_post(data_to_send['type'], data_to_send['payload'])
+        print('Data sent: {}'.format(data_to_send))
         print("Post: {}".format(utime.ticks_diff(utime.ticks_ms(), send_start)))
-        send_buffer = []
+
 
 def read_sensor():
     Timer(0).init(freq=50, mode=Timer.PERIODIC, callback=read)
 
+
 def run_score():
     Timer(1).init(freq=50, mode=Timer.PERIODIC, callback=score)
 
+
 def run_rms():
     Timer(2).init(period=10_000, mode=Timer.PERIODIC, callback=rms)
+
     
-def run_http():
-    Timer(3).init(period=3_000, mode=Timer.PERIODIC, callback=http)
+def run_send_data():
+    Timer(3).init(period=5_000, mode=Timer.PERIODIC, callback=send_data)
 
 if __name__ == '__main__':
     read_sensor()
     run_score()
     # run_rms()
-    # run_http()
+    run_send_data()
