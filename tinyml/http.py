@@ -20,7 +20,6 @@ def get_api_endpoint(t: str) -> str:
         
         Args:
             t: Target endpoint key.
-            
         Returns:
             API endpoint string.
     '''

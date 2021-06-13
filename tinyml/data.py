@@ -46,7 +46,6 @@ class Data:
                 xmin: Min value refernce.
                 xmax: Max value reference.
                 f_range: Feature range from 0 to defined value.
-            
             Returns:
                 List of scales values.
         '''
@@ -59,8 +58,7 @@ class Data:
             
             Args:
                 vals: List of values to round.
-                places: Number of decimal places for rounding.
-                
+                places: Number of decimal places for rounding.   
             Returns:
                 List of rounded floats.
         '''
@@ -85,7 +83,6 @@ class Data:
             
             Args:
                 vals: List of ints or floats.
-            
             Returns:
                 Root mean square of input values.
         '''
