@@ -31,7 +31,9 @@ send_queue = deque((),10)
 
 start_time = utime.ticks_ms()
 
+
 def read(timer):
+    '''Reads acceleration and gyroscope values from MPU6500 sensor.'''
     gc.collect()
     acc = mpu6500.acceleration
     gyro = mpu6500.gyro
@@ -39,7 +41,9 @@ def read(timer):
     # print("Measurement: {}".format(utime.ticks_ms()))
     # print('Alloc: {} | Free: {}'.format(gc.mem_alloc(), gc.mem_free()))
 
+
 def score(timer):
+    '''Runs scoring on collected data.'''
     gc.collect()
     score_start = utime.ticks_ms()
     global inf_tuples
@@ -47,7 +51,6 @@ def score(timer):
 
     gc.collect()
     now = utime.ticks_ms()
-
     input_data = data.data
 
     if len(input_data) == data_cap:
@@ -56,10 +59,9 @@ def score(timer):
             inf_tuples.append((now, res))
     
     time_diff = get_time_diff(inf_tuples)
-
-    gc.collect()
     result, reduced_infs = debounce(inf_tuples, time_diff)
     
+    gc.collect()
     if result:
         print('{} -> {}'.format(reduced_infs, result))
         send_queue.append({
@@ -76,8 +78,10 @@ def score(timer):
         
 
 def rms(timer):
+    '''Adds RMS data to send queue.'''
     gc.collect()
     global send_queue
+    
     rms = data.get_rms
     send_queue.append({
         'type': 'rms',
@@ -90,6 +94,7 @@ def rms(timer):
 
 
 def send_data(timer):
+    '''Sends queued data to API endpoint.'''
     gc.collect()
     global send_queue
     while send_queue:
@@ -101,19 +106,24 @@ def send_data(timer):
 
 
 def read_sensor():
+    '''Timer to periodically read sensor values.'''
     Timer(0).init(freq=50, mode=Timer.PERIODIC, callback=read)
 
 
 def run_score():
+    '''Timer to periodically run scoring on collected data.'''
     Timer(1).init(freq=50, mode=Timer.PERIODIC, callback=score)
 
 
 def run_rms():
+    '''Timer to periodically run RMS calculation on collected data.'''
     Timer(2).init(period=10_000, mode=Timer.PERIODIC, callback=rms)
 
     
 def run_send_data():
+    '''Timer to periodically send data to API endpoint.'''
     Timer(3).init(period=5_000, mode=Timer.PERIODIC, callback=send_data)
+
 
 if __name__ == '__main__':
     read_sensor()
