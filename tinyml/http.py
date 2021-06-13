@@ -14,8 +14,15 @@ headers = {
     }
 
 
-def get_api_endpoint(t):
-    '''Maps REST API endpoints to target.'''
+def get_api_endpoint(t: str) -> str:
+    '''
+        Maps REST API endpoints to target.
+        
+        Args:
+            t: Target endpoint key.
+        Returns:
+            API endpoint string.
+    '''
     endpoint_mapping = {
         'rms':RMS_ENDPOINT,
         'move':MOVE_ENDPOINT
@@ -23,8 +30,14 @@ def get_api_endpoint(t):
     return endpoint_mapping.get(t, 'missing')
 
 
-def request_post(api_target, payload):
-    '''Sends POST requests to REST API endpoints.'''
+def request_post(api_target: str, payload: dict):
+    '''
+        Sends POST requests to REST API endpoints.
+        
+        Args:
+            api_target: Target of data - `move` or `rms`
+            payload: Data to be sent to the endpoint.
+    '''
     endpoint = get_api_endpoint(api_target)
     data = ujson.dumps(payload)
     
