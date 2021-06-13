@@ -14,7 +14,7 @@ def do_connect():
     else:
         print('[Boot] Not connecting to WiFi. Running in Offline mode.')
 
-def set_time():
+def sync_time():
     import ntptime
     import utime
     import sys
@@ -36,5 +36,5 @@ def set_frequency():
     print('[Boot] Machine freq set to: {} MHz'.format(int(machine.freq() / 1_000_000)))
 
 do_connect()
-set_time()
+sync_time()
 set_frequency()
