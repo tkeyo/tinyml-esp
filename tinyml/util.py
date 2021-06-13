@@ -53,7 +53,7 @@ def reduce_infs(inf_tuples: list) -> list:
     return [x[1] for x in inf_tuples[:9]]
 
 
-def debounce(inf_tuples: list, time_diff: int) -> int, list:
+def debounce(inf_tuples: list, time_diff: int) -> (int, list):
     '''
         Debounces inferences - returns the most prevalent
         score from the collected inference results.
