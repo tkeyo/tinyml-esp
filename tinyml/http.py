@@ -14,7 +14,7 @@ headers = {
     }
 
 
-def get_api_endpoint(t):
+def get_api_endpoint(t: str) -> str:
     '''
         Maps REST API endpoints to target.
         
@@ -28,7 +28,7 @@ def get_api_endpoint(t):
     return endpoint_mapping.get(t, 'missing')
 
 
-def request_post(api_target, payload):
+def request_post(api_target: str, payload: dict):
     '''
         Sends POST requests to REST API endpoints.
         
