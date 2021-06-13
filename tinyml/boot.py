@@ -15,6 +15,7 @@ def do_connect():
     else:
         print('[Boot] Not connecting to WiFi. Running in Offline mode.')
 
+
 def sync_time():
     '''Synchronizes time with ntptime host.'''
     import ntptime
@@ -31,13 +32,15 @@ def sync_time():
             sys.exit()
     else:
         print('[Boot] Running in Offline mode. Time is note synced.')
-        
+
+      
 def set_frequency():
     '''Sets CPU frequency of ESP32.'''
     import machine
     machine.freq(240000000)
     print('[Boot] Machine freq set to: {} MHz'.format(int(machine.freq() / 1_000_000)))
 
-do_connect()
-sync_time()
-set_frequency()
+if __name__ == '__main__':
+    do_connect()
+    sync_time()
+    set_frequency()
