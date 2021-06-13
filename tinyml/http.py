@@ -27,7 +27,12 @@ def get_api_endpoint(t: str) -> str:
         'rms':RMS_ENDPOINT,
         'move':MOVE_ENDPOINT
     }
-    return endpoint_mapping.get(t, 'missing')
+    endpoint = endpoint_mapping.get(t, '')
+    
+    if endpoint:
+        return endpoint
+    else:
+        raise KeyError('Endpoint {} key is not defined.'.format(endpoint))
 
 
 def request_post(api_target: str, payload: dict):
