@@ -21,7 +21,6 @@ def get_api_endpoint(t):
         Args:
             t: Target endpoint key.
     '''
-    
     endpoint_mapping = {
         'rms':RMS_ENDPOINT,
         'move':MOVE_ENDPOINT
