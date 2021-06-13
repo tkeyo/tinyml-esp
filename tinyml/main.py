@@ -78,16 +78,15 @@ def score(timer):
 def rms(timer):
     gc.collect()
     global send_queue
-    rms = data.rms
+    rms = data.get_rms
     send_queue.append({
         'type': 'rms',
         'payload':{
-            'acc_x_rms':get_rms(0),
-            'acc_y_rms':get_rms(1),
-            'acc_z_rms':get_rms(2),
+            'acc_x_rms':rms(0),
+            'acc_y_rms':rms(1),
+            'acc_z_rms':rms(2),
             'time': get_time()
         }})
-    print(send_queue)
 
 
 def send_data(timer):
@@ -119,5 +118,5 @@ def run_send_data():
 if __name__ == '__main__':
     read_sensor()
     run_score()
-    # run_rms()
+    run_rms()
     run_send_data()
