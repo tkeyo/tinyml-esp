@@ -1,7 +1,7 @@
 import ujson
 import urequests
 from micropython import const
-from secret.secret import (URL, 
+from config.secret import (URL, 
                            AUTHORIZATION, 
                            MOVE_ENDPOINT, 
                            RMS_ENDPOINT,

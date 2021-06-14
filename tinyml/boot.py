@@ -21,7 +21,7 @@ def sync_time():
     import ntptime
     import utime
     import sys
-    from secret import secret
+    from config import secret
     if secret.IS_CONNECT_WIFI:
         try:
             ntptime.host = '0.europe.pool.ntp.org'
