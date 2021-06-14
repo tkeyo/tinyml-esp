@@ -1,7 +1,7 @@
 def do_connect():
     '''Creates connection to WiFi based on configuration in `secrets.py`.'''
     import network
-    from secret import secret
+    from config import secret
 
     if secret.IS_CONNECT_WIFI:
         wlan = network.WLAN(network.STA_IF)
