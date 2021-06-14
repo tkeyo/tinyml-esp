@@ -41,16 +41,17 @@ def get_final_inf_res(infs: list) -> int:
     return max(set(infs), key=infs.count)
 
 
-def reduce_infs(inf_tuples: list) -> list:
+def reduce_infs(inf_tuples: list, min_tuples: int) -> list:
     '''
         Returns the first defined number of inferences in a list inference tuples.
         
         Args:
             inf_tuples: List of inference tuples. Format of tuple `(time, inference).`
+            min_tuples: Number of inferences to return from list of tuples.
         Returns:
             List of first n inferences.
     '''
-    return [x[1] for x in inf_tuples[:9]]
+    return [x[1] for x in inf_tuples[:min_tuples]]
 
 
 def debounce(inf_tuples: list, time_diff: int) -> (int, list):
