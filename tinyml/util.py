@@ -54,7 +54,8 @@ def reduce_infs(inf_tuples: list, min_tuples: int) -> list:
     return [x[1] for x in inf_tuples[:min_tuples]]
 
 
-def debounce(inf_tuples: list, time_diff: int) -> (int, list):
+def debounce(inf_tuples: list, time_diff: int, 
+             min_tuples: int, min_t_diff: int) -> int:
     '''
         Debounces inferences - returns the most prevalent
         score from the collected inference results.
@@ -62,15 +63,17 @@ def debounce(inf_tuples: list, time_diff: int) -> (int, list):
         Args:
             inf_tuples: List of inference tuples. Format `(time,inference)`.
             time_diff: Difference between first and last inference in a list.
+            min_tuples: Number of inferences to return from list of tuples.
+            min_t_diff: Min. time difference between first and last inference.
         Returns:
             result: Most prevalent inference result.
             reduced_infs: List of first n collected inference values.
     '''
-    if len(inf_tuples) >= 9 and time_diff > 450:
-    #     # start_time = utime.ticks_ms()
-        reduced_infs = reduce_infs(inf_tuples)
+    if len(inf_tuples) >= min_tuples and time_diff > min_t_diff:
+        reduced_infs = reduce_infs(inf_tuples, min_tuples)
         result = get_final_inf_res(reduced_infs)
-        return result, reduced_infs
+        print('{} -> {}'.format(reduced_infs, result))
+        return result
     else:
         return None
 

@@ -63,7 +63,7 @@ def score(timer):
             inf_tuples.append((now, res))
     
     time_diff = get_time_diff(inf_tuples)
-    result, reduced_infs = debounce(inf_tuples, time_diff)
+    result = debounce(inf_tuples, time_diff, 9, 450)
     
     gc.collect()
     if result:
@@ -76,8 +76,7 @@ def score(timer):
                 }})
         inf_tuples = [] # cleans inference tuple buffer after inference
     
-    if len(inf_tuples) <= 8 and time_diff >= 1_000:
-        inf_tuples = []
+    inf_tuples = clean_inf_tuples(inf_tuples, time_diff)
         
 
 def rms(timer):
