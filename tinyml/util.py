@@ -71,4 +71,20 @@ def debounce(inf_tuples: list, time_diff: int) -> (int, list):
         result = get_final_inf_res(reduced_infs)
         return result, reduced_infs
     else:
-        return None, None
+        return None
+
+
+def clean_inf_tuples(inf_tuples: list, time_diff: int) -> list:
+    '''
+        Purges inference tuples buffer.
+        
+        Args:
+            inf_tuples: List of inference tuples. Format `(time,inference)`.
+            time_diff: Difference between first and last inference in a list.
+        Returns:
+            List of inference tuples.
+    '''
+    if len(inf_tuples) <= 8 and time_diff >= 1_000:
+        return []
+    else:
+        return inf_tuples
