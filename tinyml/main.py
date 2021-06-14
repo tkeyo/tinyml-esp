@@ -19,8 +19,8 @@ from http import request_post
 
 from model import random_forest_a8c9ff5 as rf
 
-print('[Main] Starting ESP32 script.')
 
+print('[Main] Starting ESP32 script')
 
 # initialize IMU connection
 gc.collect()
@@ -32,8 +32,7 @@ mpu6500 = MPU6500(i2c, accel_sf=SF_M_S2, gyro_sf=SF_DEG_S)
 gc.collect()
 data = Data(freq=50, n_signals=5)
 data_cap = data.capacity
-print('[Main] Data store initiated. Capacity: {}'.format(data_cap))
-
+print('[Main] Data store initiated. Capacity: {}\n\n'.format(data_cap))
 
 
 # initialize inference collection tuples
