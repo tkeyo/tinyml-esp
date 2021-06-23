@@ -13,8 +13,8 @@ gc.collect()
 from config import config
 from data import Data
 from util import (get_time, get_time_diff,
-                  get_final_inf_res, reduce_infs, 
-                  clean_inf_tuples, debounce)
+                    get_final_inf_res, reduce_infs, 
+                    clean_inf_tuples, debounce)
 from http import request_post
 
 from model import random_forest_a8c9ff5 as rf
