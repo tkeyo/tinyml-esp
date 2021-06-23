@@ -8,7 +8,7 @@ unix_base = const(946681200) # utime.gmtime(0) - epoch 0
 def get_time() -> int:
     '''
         Gets current time in ms format. Time must be synced with ntp 
-        in order to be accurate.
+        to be accurate.
     '''
     return (utime.mktime(utime.gmtime()) + unix_base + 3600) * 1000
 
