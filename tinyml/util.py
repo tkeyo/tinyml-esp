@@ -78,10 +78,8 @@ def debounce(inf_tuples: list, time_diff: int,
         return None
 
 
-def clean_inf_tuples(inf_tuples: list, 
-                     time_diff: int,
-                     max_tuples: int,
-                     max_t_diff: int) -> list:
+def clean_inf_tuples(inf_tuples: list, time_diff: int,
+                     max_tuples: int, max_t_diff: int) -> list:
     '''
         Purges inference tuples buffer.
         
