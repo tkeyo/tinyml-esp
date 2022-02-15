@@ -31,4 +31,4 @@ SDA = pin 21
 1. Check the port. On MacOS use `ls /dev/cu.*`. Linux, Windows and more info on establishing connection on this site [Espressif - Establish Serial Connection with ESP32](-idf/en/latest/esp32/get-started/establish-serial-connection.html#)
 2. Flash the ESP32 - Follow **Installation instructions** here [ESP32](https://micropython.org/download/esp32/)
 3. For convenience use Pymakr VSCode extension [Pymakr VSCode](https://docs.pycom.io/gettingstarted/software/vscode/)
-4. Upload data using Pymakr Extension
+4. Upload Python scripts to ESP32 using Pymakr Extension
