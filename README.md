@@ -1,8 +1,10 @@
 ## TinyML with ESP32 and MicroPython
-Implementation of TinyML in pure (micro)Python on ESP32. The setup collects accelerometer & gyro data. It detects 3 types of gestures:
+Implementation of TinyML in pure (micro)Python on ESP32. The setup collects accelerometer & gyro data. Uses ML algorithm (Random Forest Classifier) to detect gestures from the collected (acceleration & gyro) time-series data. It detects 3 types of gestures:
   1. Movement along X axis
   2. Movement along Y axis
   3. Circle Movement
+
+It sends the collected data and detected gestures to backend that saves data into a database.
 
 Blog: [TinyML: Machine Learning on ESP32 with MicroPython](https://dev.to/tkeyo/tinyml-machine-learning-on-esp32-with-micropython-38a6)
 
